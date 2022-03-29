@@ -1,0 +1,39 @@
+﻿@model List<MVC_Test.Models.Product>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>商品列表</h2>
+@if (ViewBag.ResultMessage != null) // 判斷如果有訊息，則顯示。
+{
+    @Html.Label("info", (string)ViewBag.ResultMessage, new { @class = "text-info" })
+}
+<table class="table">
+    <thead><tr><td colspan="2">操作</td><td>商品圖</td><td>編號</td><td>名稱</td><td>描述</td><td>售價</td><td>庫存</td></tr></thead>
+    <tbody>
+        @foreach (var pd in this.Model) // 使用Froeach將所有商品列出
+        {
+        <tr>
+            <td>
+                @Html.ActionLink("編輯", "Edit", new { id = pd.Id }, new { @class = "btn brn-default" })
+            </td>
+            <td>
+                @*@Html.ActionLink("刪除", "Delete", new { id = pd.Id }, new { @class = "btn btn-default" })*@
+                @using (@Html.BeginForm("Delete", "Product", FormMethod.Post, new { @class = "Delete" })) 
+                {
+                    @Html.Hidden("id", pd.Id)
+                    <input type="submit" value="刪除" class="btn btn-default" />
+                }
+            </td>
+            <td><img src="@pd.DefaultImageURL" width="50" height="50"/></td>
+            <td>@pd.Id</td>
+            <td>@pd.Name</td>
+            <td>@pd.Description</td>
+            <td>@pd.Price</td>
+            <td>@pd.Quantity</td>
+        </tr>
+        }
+    </tbody>
+</table>
+

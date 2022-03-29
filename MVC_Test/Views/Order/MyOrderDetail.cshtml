@@ -1,0 +1,28 @@
+﻿@model IEnumerable<MVC_Test.Models.OrderDetail>
+
+<h2>@String.Format("訂單編號{0}商品列表", this.Model.First().Id)</h2>
+<hr />
+@Html.ActionLink("回商品列表", "MyOrder", new { }, new { @class = "btn btn-default" })
+<table class="table">
+    <tr>
+        <th>商品名稱</th>
+        <th>商品價格</th>
+        <th>購買數量</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+        </tr>
+    }
+</table>
+@Html.ActionLink("回商品列表", "MyOrder", new { }, new { @class = "btn btn-default" })
+

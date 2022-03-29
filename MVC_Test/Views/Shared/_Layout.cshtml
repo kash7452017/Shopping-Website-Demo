@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title 我的ASP.NET 應用程式</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+    @* 購物車Js *@
+    <script type="text/javascript">
+        // 網頁載入完成時執行之function
+        $(document).ready(function () {
+            console.log("ready!");
+        });
+
+        // 加入編號為productId的商品進購物車
+        function AddToCart(productId) {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("AddToCart","Cart")',
+                data: { id: productId }
+            })
+                .done(function (msg) {
+                    // 將回傳的購物車頁面 填入 li#Cart
+                    $('li#Cart').html(msg);
+                });
+        }
+
+        function RemoveFromCart(productId) {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("RemoveFromCart","Cart")',
+                data: { id: productId }
+            })
+                .done(function (msg) {
+                    // 將回傳的購物車頁面填入 li#Cart
+                    $('li#Cart').html(msg);
+                });
+        }
+
+        // 清空購物車內所有商品
+        function ClearCart() {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("ClearCart", "Cart")',
+                data: {}
+            })
+                .done(function (msg) {
+                    // 將回傳的購物車頁面填入 li#Cart
+                    $('li#Cart').html(msg);
+                });
+        }
+    </script>
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("購物網站", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("首頁", "Index", "Home")</li>
+                    <li>@Html.ActionLink("關於", "About", "Home")</li>
+                    <li>@Html.ActionLink("連絡方式", "Contact", "Home")</li>
+                    <li>@Html.ActionLink("商品管理", "Index", "Product")</li>
+                    <li>@Html.ActionLink("會員管理", "Index", "ManageUser")</li>
+                    <li>@Html.ActionLink("訂單管理", "Index", "ManageOrder")</li>
+                    <li id="Cart">
+                        @Html.Partial("_CartPartial")
+                    </li>
+                </ul>
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - 我的 ASP.NET 應用程式 2022/03/08</p>
+        </footer>
+    </div>
+
+    @*會導致購物車下拉是選單無法顯示，此三行已改加至上方*@
+    @*@Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)*@
+</body>
+</html>

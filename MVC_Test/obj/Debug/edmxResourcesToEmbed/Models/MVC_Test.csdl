@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="MVC_TestModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="MVC_TestEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Products" EntityType="MVC_TestModel.Product" />
+    <EntitySet Name="Order" EntityType="MVC_TestModel.Order" />
+    <EntitySet Name="OrderDetail" EntityType="MVC_TestModel.OrderDetail" />
+    <AssociationSet Name="OrderOrderDetail" Association="MVC_TestModel.OrderOrderDetail">
+      <End Role="Order" EntitySet="Order" />
+      <End Role="OrderDetail" EntitySet="OrderDetail" />
+    </AssociationSet>
+    <EntitySet Name="ProductCommentSet" EntityType="MVC_TestModel.ProductComment" />
+  </EntityContainer>
+  <EntityType Name="Product">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="100" />
+    <Property Name="Description" Type="String" Nullable="false" />
+    <Property Name="CategoryId" Type="Int32" Nullable="false" />
+    <Property Name="Price" Type="Decimal" Nullable="false" Precision="28" Scale="3" />
+    <Property Name="PublishDate" Type="DateTime" Nullable="false" />
+    <Property Name="Status" Type="Boolean" Nullable="false" />
+    <Property Name="DefaultImageId" Type="Int32" Nullable="false" />
+    <Property Name="Quantity" Type="Int32" Nullable="false" />
+    <Property Name="DefaultImageURL" Type="String" Nullable="true" />
+  </EntityType>
+  <EntityType Name="Order">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <NavigationProperty Name="OrderDetail" Relationship="MVC_TestModel.OrderOrderDetail" FromRole="Order" ToRole="OrderDetail" />
+    <Property Name="UserId" Type="String" Nullable="false" />
+    <Property Name="RecieverName" Type="String" Nullable="false" />
+    <Property Name="RecieverPhone" Type="String" Nullable="false" />
+    <Property Name="RecieverAddress" Type="String" Nullable="false" />
+  </EntityType>
+  <EntityType Name="OrderDetail">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <NavigationProperty Name="Order" Relationship="MVC_TestModel.OrderOrderDetail" FromRole="OrderDetail" ToRole="Order" />
+    <Property Name="OrderId" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" Nullable="false" />
+    <Property Name="Price" Type="Decimal" Nullable="false" />
+    <Property Name="Quantity" Type="Int32" Nullable="false" />
+  </EntityType>
+  <Association Name="OrderOrderDetail">
+    <End Type="MVC_TestModel.Order" Role="Order" Multiplicity="1" />
+    <End Type="MVC_TestModel.OrderDetail" Role="OrderDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Order">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="OrderDetail">
+        <PropertyRef Name="OrderId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="ProductComment">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserId" Type="String" Nullable="false" />
+    <Property Name="Content" Type="String" Nullable="false" />
+    <Property Name="CreateDate" Type="DateTime" Nullable="false" />
+    <Property Name="ProductId" Type="Int32" Nullable="false" />
+  </EntityType>
+</Schema>

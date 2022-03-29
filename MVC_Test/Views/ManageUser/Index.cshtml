@@ -1,0 +1,35 @@
+﻿@model List<MVC_Test.Models.ManageUser>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>網站會員管理</h2>
+@if (ViewBag.ResultMessage != null) // 判斷如果有訊息，則顯示。
+{
+    @Html.Label("info", (string)ViewBag.ResultMessage, new { @class = "text-info" })
+}
+
+<table class="table">
+    <thead><tr><td>暱稱</td><td>電子郵件</td><td>操作</td></tr></thead>
+    <tbody>
+        @foreach (var pd in this.Model) // 使用Froeach將所有管理員資料列出
+        {
+            <tr>
+                <td>@pd.UserName</td>
+                <td>@pd.Email</td>
+                <td>
+                    @Html.ActionLink("編輯", "Edit", new { id = pd.Id }, new { @class = "btn brn-default" })
+                </td>
+                @*<td>
+                        @using (@Html.BeginForm("Delete", "Product", FormMethod.Post, new { @class = "Delete" }))
+                        {
+                            @Html.Hidden("id", pd.Id)
+                            <input type="submit" value="刪除" class="btn btn-default" />
+                        }
+                    </td>*@
+            </tr>
+        }
+    </tbody>
+</table>
+

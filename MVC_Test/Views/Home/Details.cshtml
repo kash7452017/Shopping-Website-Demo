@@ -1,0 +1,88 @@
+﻿@model MVC_Test.Models.Product
+
+@{ 
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+
+    var commentList = new List<MVC_Test.Models.ProductComment>();
+    using (MVC_Test.Models.MVC_TestEntities db = new MVC_Test.Models.MVC_TestEntities()) 
+    {
+        commentList = (from s in db.ProductCommentSet
+                       where s.ProductId == this.Model.Id
+                       select s).ToList();
+    }
+}
+
+<h2>商品資訊</h2>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+
+        </dt>
+
+        <dd>
+            <img src="@this.Model.DefaultImageURL" width="400" />
+        </dd>
+
+        <dt>
+            商品名稱
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            商品描述
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt>
+            售價
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+
+        <dt>
+            庫存數量
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Quantity)
+        </dd>
+
+    </dl>
+
+    <dl class="dl-horizontal">
+        @foreach (var comment in commentList)
+        {
+            string result = string.Empty;
+            <dt>
+            @using (MVC_Test.Models.UserEntities db = new MVC_Test.Models.UserEntities())
+            {
+                result = (from s in db.AspNetUsers
+                              where s.Id == comment.UserId
+                              select s.UserName).FirstOrDefault();
+
+            }@result：</dt>
+            <dd>@comment.Content  (@comment.CreateDate)  </dd>
+        }
+    </dl>
+
+    @using (Html.BeginForm("AddComment", "Home", FormMethod.Post, new { })) 
+    {
+        @Html.HiddenFor(m => m.Id)
+        @Html.TextBox("Content")
+        <input type="submit" value="留言" class="btn btn btn-default"/>
+    }
+</div>
+<p>
+    @Html.ActionLink("回首頁", "Index", null, new { @class = "btn btn-default" })
+</p>
